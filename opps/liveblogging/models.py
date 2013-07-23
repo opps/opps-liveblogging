@@ -7,12 +7,11 @@ from opps.core.models import Publishable
 from opps.containers.models import Container
 
 
-class Events(Container):
+class Event(Container):
     pass
 
 
-class Messages(Publishable):
+class Message(Publishable):
     event = models.ForeignKey('liveblogging.Event',
-                              on_delete=models.SET_NULL,
                               verbose_name=_(u'Event'))
     message = models.TextField(_(u'Message'))
