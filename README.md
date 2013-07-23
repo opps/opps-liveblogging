@@ -1,4 +1,4 @@
 opps-liveblogging
 =================
 
-Live Blogging app for Opps
+Liveblogging app, event broadcast via text
