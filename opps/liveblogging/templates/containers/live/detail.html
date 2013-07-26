@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load admin_list i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Liveblogging administration" %} | {% trans 'Opps site admin' %}{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li><a href="../../">{% trans "Home" %}</a> <span class="divider">/</span></li>
+    <li><a href="../">{% trans "Liveblogging" %}</a> <span class="divider">/</span></li>
+    <li><a href="./">{% trans "Menssages" %}</a> <span class="divider">/</span></li>
+    <li class="active">{{ context.title }}</li>
+</ul>
+<div class="page-header">
+  <h3>{{ context.title }} {% trans "Administration" %}</h3>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+</div>
+{% endblock %}
