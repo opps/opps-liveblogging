@@ -4,10 +4,17 @@ from django.conf.urls import patterns, url
 from django.views.decorators.cache import cache_page
 
 from .views import EventAPIList, MessageAPIList
+from .views import EventList
 from .conf import settings
 
 
 urlpatterns = patterns(
+    '',
+    url(r'^admin/liveblogging/message/$', EventList.as_view(),
+        name='event-list', kwargs={'channel__long_slug': u'live'}),
+)
+
+urlpatterns += patterns(
     '',
     url(r'^{}/event/(?P<event__id>\d+).api$'.format(
         settings.OPPS_LIVEBLOGGING_CHANNEL),
