@@ -30,6 +30,11 @@ class EventDetail(DetailView):
         context['messageform'] = MessageForm
         return context
 
+    def post(self, request, *args, **kwargs):
+        msg = request.POST['message']
+        resp = {'menssage': msg, 'status': True}
+        return HttpResponse(json.dumps(resp), mimetype="application/json")
+
 
 class EventAPIList(ListAPIView):
     model = Event
