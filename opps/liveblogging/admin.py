@@ -27,5 +27,10 @@ class EventAdmin(PublishableAdmin):
     )
 
 
+class MessageAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+
 admin.site.register(Event, EventAdmin)
-admin.site.register(Message)
+admin.site.register(Message, MessageAdmin)
