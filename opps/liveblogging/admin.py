@@ -9,6 +9,7 @@ from .models import Event, Message
 
 
 class EventAdmin(PublishableAdmin):
+    prepopulated_fields = {"slug": ["title"]}
     raw_id_fields = ['channel', 'main_image']
     fieldsets = (
         (_(u'Identification'), {
