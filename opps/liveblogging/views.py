@@ -23,16 +23,19 @@ class EventDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventDetail, self).get_context_data(**kwargs)
         try:
-            msg = Message.objects.get(event__slug=self.slug)
+            msg = Message.objects.filter(event__slug=self.slug,
+                                         published=True)
         except Message.DoesNotExist:
             msg = []
-        context['messages'] = msg
+        context['msg'] = msg
         context['messageform'] = MessageForm
         return context
 
     def post(self, request, *args, **kwargs):
         msg = request.POST['message']
-        resp = {'menssage': msg, 'status': True}
+        obj = Message.objects.create(message=msg, user=request.user,
+                                     event=self.get_object(), published=True)
+        resp = {'menssage': msg, 'status': obj.published}
         return HttpResponse(json.dumps(resp), mimetype="application/json")
 
 
