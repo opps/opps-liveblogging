@@ -21,7 +21,7 @@
   {% for event in context %}
     <li class="span4">
       <div class="thumbnail">
-        <img src="{{ event.main_image.archive }}" />
+        <img src="{{ MEDIA_URL }}{{ event.main_image.archive }}" />
         <div class="caption">
           <h3>{{ event.title }}</h3>
           <p>{{ event.hat }}</p>
