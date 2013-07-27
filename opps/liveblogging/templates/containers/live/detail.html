@@ -41,11 +41,16 @@ $(document).ready(function(){
       data: $("form").serialize(),
       success: function (ret){
         $("#id_message").val("");
+        $("#id_message").focus();
         $("#msgs").append("<p>"+ ret.menssage +"</p>");
       }
     });
   });
 });
+
+window.setInterval(function(){
+  $("#msgs").scrollTop($("#msgs")[0].scrollHeight);
+}, 500);
 </script>
 {% endblock %}
 
