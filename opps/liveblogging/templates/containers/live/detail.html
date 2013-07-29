@@ -1,0 +1,20 @@
+<div id="result">
+</div>
+<script>
+
+if (typeof(EventSource)!=="undefined") {
+  var source = new EventSource("/live/server/testando");
+
+  source.onopen = function () {
+  }
+
+  source.onerror = function () {
+  }
+
+  source.onmessage = function (event) {
+    document.getElementById("result").innerHTML += "<p>" + event.data + "</p>";
+  };
+} else {
+  document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+}
+</script>
