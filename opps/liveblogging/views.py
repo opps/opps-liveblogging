@@ -13,11 +13,17 @@ from .forms import MessageForm
 import json
 
 
-class EventAdminList(ListView):
+class EventAdmin(object):
+    def get_template_names(self):
+        su = super(EventAdmin, self).get_template_names()
+        return ["{}_admin.html".format(name.split('.html')[0]) for name in su]
+
+
+class EventAdminList(EventAdmin, ListView):
     model = Event
 
 
-class EventAdminDetail(DetailView):
+class EventAdminDetail(EventAdmin, DetailView):
     model = Event
 
     def get_context_data(self, **kwargs):
