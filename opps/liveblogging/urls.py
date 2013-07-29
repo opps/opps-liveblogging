@@ -2,18 +2,21 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 from django.views.decorators.cache import cache_page
+from django.contrib.auth.decorators import login_required
 
 from .views import EventAPIList, MessageAPIList
-from .views import EventList, EventDetail
+from .views import EventAdminList, EventAdminDetail
 from .conf import settings
 
 
 urlpatterns = patterns(
     '',
-    url(r'^admin/liveblogging/message/(?P<slug>[\w-]+)$', EventDetail.as_view(),
-        name='event-detail', kwargs={'channel__long_slug': u'live'}),
-    url(r'^admin/liveblogging/message/$', EventList.as_view(),
-        name='event-list', kwargs={'channel__long_slug': u'live'}),
+    url(r'^admin/liveblogging/message/(?P<slug>[\w-]+)$',
+        login_required(EventAdminDetail.as_view()), name='event-admin-detail',
+        kwargs={'channel__long_slug': u'live'}),
+    url(r'^admin/liveblogging/message/$',
+        login_required(EventAdminList.as_view()), name='event-admin-list',
+        kwargs={'channel__long_slug': u'live'}),
 )
 
 urlpatterns += patterns(
