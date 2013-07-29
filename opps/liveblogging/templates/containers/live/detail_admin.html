@@ -43,14 +43,11 @@ $(document).ready(function(){
         $("#id_message").val("");
         $("#id_message").focus();
         $("#msgs").append("<p>"+ ret.menssage +"</p>");
+        $("#msgs").scrollTop($("#msgs")[0].scrollHeight);
       }
     });
   });
 });
-
-window.setInterval(function(){
-  $("#msgs").scrollTop($("#msgs")[0].scrollHeight);
-}, 500);
 </script>
 {% endblock %}
 
