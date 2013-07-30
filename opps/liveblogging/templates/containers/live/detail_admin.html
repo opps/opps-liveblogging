@@ -6,9 +6,9 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-  <li><a href="../../">{% trans "Home" %}</a> <span class="divider">/</span></li>
-  <li><a href="../">{% trans "Liveblogging" %}</a> <span class="divider">/</span></li>
-  <li><a href="./">{% trans "Menssages" %}</a> <span class="divider">/</span></li>
+  <li><a href="../../">{% trans "Home" %}</a> </li>
+  <li><a href="../">{% trans "Liveblogging" %}</a> </li>
+  <li><a href="./">{% trans "Menssages" %}</a> </li>
   <li class="active">{{ context.title }}</li>
 </ul>
 {% endblock %}
@@ -31,19 +31,19 @@
 
 {% block extrahead %}
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#btnPost').click(function(){
-    if ($("#id_message").val() == "") {
+django.jQuery(document).ready(function(){
+  django.jQuery('#btnPost').click(function(){
+    if (django.jQuery("#id_message").val() == "") {
       return false;
     }
-    $.ajax({
+    django.jQuery.ajax({
       type: "POST",
-      data: $("form").serialize(),
+      data: django.jQuery("form").serialize(),
       success: function (ret){
-        $("#id_message").val("");
-        $("#id_message").focus();
-        $("#msgs").append("<p>"+ ret.menssage +"</p>");
-        $("#msgs").scrollTop($("#msgs")[0].scrollHeight);
+        django.jQuery("#id_message").val("");
+        django.jQuery("#id_message").focus();
+        django.jQuery("#msgs").append("<p>"+ ret.menssage +"</p>");
+        django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
       }
     });
   });
