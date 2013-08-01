@@ -10,6 +10,7 @@ from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
 from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
+from opps.db._redis import Redis
 
 from .models import Event, Message
 from .forms import MessageForm
@@ -21,14 +22,21 @@ import time
 class EventServerDetail(DetailView):
     model = Event
 
-    def _longpolling(self, request):
+    def _queue(self):
+        redis = Redis('eventadmindetail', self.get_object().id)
+        pubsub = redis.object().pubsub()
+        pubsub.subscribe(redis.key)
+
         while True:
-            yield "data: test streaming server\n\n"
+            for m in pubsub.listen():
+                if m['type'] == 'message':
+                    yield u"data: {}\n\n".format(m['data'])
+            yield
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        response = StreamingHttpResponse(self._longpolling(request),
+        response = StreamingHttpResponse(self._queue(),
                                          mimetype='text/event-stream')
         response['Cache-Control'] = 'no-cache'
         response['Software'] = 'opps-liveblogging'
@@ -64,11 +72,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         msg = request.POST['message']
         obj = Message.objects.create(message=msg, user=request.user,
                                      event=self.get_object(), published=True)
-        resp = json.dumps({'menssage': msg, 'status': obj.published})
-
-        # Generate message event INFO
-        messages.add_message(request, messages.INFO, resp)
-        return HttpResponse(resp, mimetype="application/json")
+        return HttpResponse(msg)
 
 
 class EventAPIList(ListAPIView):
