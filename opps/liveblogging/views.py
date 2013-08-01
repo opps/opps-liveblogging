@@ -9,7 +9,7 @@ from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
 from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
-from opps.db._redis import Redis
+from opps.db import Db
 
 from .models import Event, Message
 from .forms import MessageForm
@@ -21,7 +21,7 @@ class EventServerDetail(DetailView):
     model = Event
 
     def _queue(self):
-        redis = Redis('eventadmindetail', self.get_object().id)
+        redis = Db('eventadmindetail', self.get_object().id)
         pubsub = redis.object().pubsub()
         pubsub.subscribe(redis.key)
 
@@ -71,7 +71,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         obj = Message.objects.create(message=msg, user=request.user,
                                      event=self.get_object(), published=True)
         if obj.published:
-            redis = Redis(self.__class__.__name__, self.get_object().id)
+            redis = Db(self.__class__.__name__, self.get_object().id)
             redis.publish(msg)
 
         return HttpResponse(msg)
