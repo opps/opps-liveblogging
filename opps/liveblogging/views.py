@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
-from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -15,7 +14,6 @@ from opps.db._redis import Redis
 from .models import Event, Message
 from .forms import MessageForm
 
-import json
 import time
 
 
