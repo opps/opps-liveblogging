@@ -1,6 +1,9 @@
-<div id="result"></div>
+<div id="result">
+  {% for m in msg %}
+  <p>{{ m.message|safe }}</p>
+  {% endfor %}
+</div>
 <script>
-
 if (!!window.EventSource) {
   var source = new EventSource("/live/server/testando");
 
