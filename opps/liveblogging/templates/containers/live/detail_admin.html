@@ -39,10 +39,10 @@ django.jQuery(document).ready(function(){
     django.jQuery.ajax({
       type: "POST",
       data: django.jQuery("form").serialize(),
-      success: function (ret){
+      success: function (e){
         django.jQuery("#id_message").val("");
         django.jQuery("#id_message").focus();
-        django.jQuery("#msgs").append("<p>"+ ret.menssage +"</p>");
+        django.jQuery("#msgs").append("<p>"+ e +"</p>");
         django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
       }
     });
