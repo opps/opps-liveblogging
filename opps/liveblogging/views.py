@@ -16,6 +16,19 @@ from .forms import MessageForm
 
 import time
 
+class EventDetail(DetailView):
+    model = Event
+
+    def get_context_data(self, **kwargs):
+        context = super(EventDetail, self).get_context_data(**kwargs)
+        try:
+            msg = Message.objects.filter(event__slug=self.slug,
+                                         published=True)
+        except Message.DoesNotExist:
+            msg = []
+        context['msg'] = msg
+        return context
+
 
 class EventServerDetail(DetailView):
     model = Event
@@ -43,17 +56,18 @@ class EventServerDetail(DetailView):
 
 
 class EventAdmin(object):
+    model = Event
+
     def get_template_names(self):
         su = super(EventAdmin, self).get_template_names()
         return ["{}_admin.html".format(name.split('.html')[0]) for name in su]
 
 
 class EventAdminList(EventAdmin, ListView):
-    model = Event
+    pass
 
 
 class EventAdminDetail(EventAdmin, DetailView):
-    model = Event
 
     def get_context_data(self, **kwargs):
         context = super(EventAdminDetail, self).get_context_data(**kwargs)
