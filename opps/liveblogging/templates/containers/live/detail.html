@@ -1,8 +1,7 @@
-<div id="result">
-</div>
+<div id="result"></div>
 <script>
 
-if (typeof(EventSource)!=="undefined") {
+if (!!window.EventSource) {
   var source = new EventSource("/live/server/testando");
 
   source.onopen = function () {
@@ -11,10 +10,22 @@ if (typeof(EventSource)!=="undefined") {
   source.onerror = function () {
   }
 
-  source.onmessage = function (event) {
-    document.getElementById("result").innerHTML += "<p>" + event.data + "</p>";
+  source.addEventListener('update', function(e) {
+    var data = JSON.parse(e.data);
+    console.log(data.id, data.msg);
+  }, false);
+
+  source.addEventListener('error', function(e) {
+    if (e.readyState == EventSource.CLOSED) {
+      //
+    }
+  }, false);
+
+  source.onmessage = function(e) {
+    document.getElementById("result").innerHTML += "<p>" + e.data + "</p>";
+    document.getElementById("result").innerHTML += "<p>" + e.event + "</p>";
   };
 } else {
-  document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+  // Result to xhr polling :(
 }
 </script>
