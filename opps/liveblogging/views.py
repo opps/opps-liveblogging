@@ -72,6 +72,10 @@ class EventAdminDetail(EventAdmin, DetailView):
         msg = request.POST['message']
         obj = Message.objects.create(message=msg, user=request.user,
                                      event=self.get_object(), published=True)
+        if obj.published:
+            redis = Redis(self.__class__.__name__, self.get_object().id)
+            redis.publish(msg)
+
         return HttpResponse(msg)
 
 
