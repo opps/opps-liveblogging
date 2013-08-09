@@ -6,26 +6,28 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-    <li><a href="../../">{% trans "Home" %}</a> <span class="divider">/</span></li>
-    <li><a href="../">{% trans "Liveblogging" %}</a> <span class="divider">/</span></li>
+    <li><a href="../../">{% trans "Home" %}</a> </li>
+    <li><a href="../">{% trans "Liveblogging" %}</a></li>
     <li class="active">{% trans "Menssages" %}</li>
 </ul>
-<div class="page-header">
-  <h3>{% trans "Liveblogging administration" %}</h3>
-</div>
 {% endblock %}
 
 {% block content %}
+<div class="page-header">
+  <h3>{% trans "Liveblogging administration" %}</h3>
+</div>
 <div id="content-main">
   <ul>
   {% for event in context %}
     <li class="span4">
       <div class="thumbnail">
-        <img src="{{ MEDIA_URL }}{{ event.main_image.archive }}" />
+        <a href="{% url 'liveblogging:event-admin-detail' event.slug %}" class="btn btn-primary">
+           <img src="{{ MEDIA_URL }}{{ event.main_image.archive }}" />
+        </a>
         <div class="caption">
           <h3>{{ event.title }}</h3>
           <p>{{ event.hat }}</p>
-          <p><a href="{% url 'liveblogging:event-detail' event.slug %}" class="btn btn-primary">{% trans "Join" %}</a></p>
+          <p><a href="{% url 'liveblogging:event-admin-detail' event.slug %}" class="btn btn-primary">{% trans "Join" %}</a></p>
         </div>
       </div>
     </li>

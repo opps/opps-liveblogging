@@ -1,8 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[opps.liveblogging]
+[opps-liveblogging.liveblogging]
 file_filter = opps/liveblogging/locale/<lang>/LC_MESSAGES/django.po
 source_file = opps/liveblogging/locale/en/LC_MESSAGES/django.po
 source_lang = en
-

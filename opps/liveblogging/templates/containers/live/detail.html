@@ -1,70 +1,34 @@
-{% extends "admin/base_site.html" %}
-{% load admin_list i18n %}
-{% load url from future %}
-
-{% block title %}{% trans "Liveblogging administration" %} | {% trans 'Opps site admin' %}{% endblock %}
-
-{% block breadcrumbs %}
-<ul class="breadcrumb">
-  <li><a href="../../">{% trans "Home" %}</a> <span class="divider">/</span></li>
-  <li><a href="../">{% trans "Liveblogging" %}</a> <span class="divider">/</span></li>
-  <li><a href="./">{% trans "Menssages" %}</a> <span class="divider">/</span></li>
-  <li class="active">{{ context.title }}</li>
-</ul>
-{% endblock %}
-
-{% block content_title %}
-<div class="page-header">
-  <h3>{{ context.title }} {% trans "Administration" %}</h3>
+<div id="result">
+  {% for m in msg %}
+  <p>{{ m.message|safe }}</p>
+  {% endfor %}
 </div>
-{% endblock %}
+<script>
+if (!!window.EventSource) {
+  var source = new EventSource("/live/server/testando");
 
-{% block extrastyle %}
-<style>
-#msgs {
-  height: 650px;
-  padding: 5px;
-  overflow: scroll;
-}
-</style>
-{% endblock %}
+  source.onopen = function () {
+  }
 
-{% block extrahead %}
-<script type="text/javascript">
-$(document).ready(function(){
-  $('#btnPost').click(function(){
-    if ($("#id_message").val() == "") {
-      return false;
+  source.onerror = function () {
+  }
+
+  source.addEventListener('update', function(e) {
+    var data = JSON.parse(e.data);
+    console.log(data.id, data.msg);
+  }, false);
+
+  source.addEventListener('error', function(e) {
+    if (e.readyState == EventSource.CLOSED) {
+      //
     }
-    $.ajax({
-      type: "POST",
-      data: $("form").serialize(),
-      success: function (ret){
-        $("#id_message").val("");
-        $("#id_message").focus();
-        $("#msgs").append("<p>"+ ret.menssage +"</p>");
-      }
-    });
-  });
-});
+  }, false);
 
-window.setInterval(function(){
-  $("#msgs").scrollTop($("#msgs")[0].scrollHeight);
-}, 500);
+  source.onmessage = function(e) {
+    document.getElementById("result").innerHTML += "<p>" + e.data + "</p>";
+    document.getElementById("result").innerHTML += "<p>" + e.event + "</p>";
+  };
+} else {
+  // Result to xhr polling :(
+}
 </script>
-{% endblock %}
-
-{% block content %}
-<div id="content-main">
-  <form method="post">
-    {% csrf_token %}
-    <input id="id_message" name="message" class="input-block-level" type="text">
-    <button id="btnPost" class="btn btn-primary" type="button">{% trans "Post" %}</button>
-  </form>
-  <div class="thumbnail" id="msgs">
-    {% for m in msg %}
-    <p>{{ m.message|safe }}</p>
-    {% endfor %}
-  </div>
-</div>
-{% endblock %}
