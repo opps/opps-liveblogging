@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-09 17:26-0300\n"
+"POT-Creation-Date: 2013-08-12 12:06-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,48 +33,56 @@ msgstr ""
 msgid "Publication"
 msgstr ""
 
-#: models.py:19
+#: models.py:15 models.py:22
 msgid "Event"
 msgstr ""
 
-#: models.py:20
+#: models.py:16
+msgid "Events"
+msgstr ""
+
+#: models.py:23 models.py:31
 msgid "Message"
 msgstr ""
 
-#: templates/containers/live/detail.html:5
-#: templates/containers/live/list.html:5
-#: templates/containers/live/list.html:14
+#: models.py:32
+msgid "Messages"
+msgstr ""
+
+#: templates/containers/live/detail_admin.html:5
+#: templates/containers/live/list_admin.html:5
+#: templates/containers/live/list_admin.html:17
 msgid "Liveblogging administration"
 msgstr ""
 
-#: templates/containers/live/detail.html:5
-#: templates/containers/live/list.html:5
+#: templates/containers/live/detail_admin.html:5
+#: templates/containers/live/list_admin.html:5
 msgid "Opps site admin"
 msgstr ""
 
-#: templates/containers/live/detail.html:9
-#: templates/containers/live/list.html:9
+#: templates/containers/live/detail_admin.html:9
+#: templates/containers/live/list_admin.html:9
 msgid "Home"
 msgstr ""
 
-#: templates/containers/live/detail.html:10
-#: templates/containers/live/list.html:10
+#: templates/containers/live/detail_admin.html:10
+#: templates/containers/live/list_admin.html:10
 msgid "Liveblogging"
 msgstr ""
 
-#: templates/containers/live/detail.html:11
-#: templates/containers/live/list.html:11
+#: templates/containers/live/detail_admin.html:11
+#: templates/containers/live/list_admin.html:11
 msgid "Menssages"
 msgstr ""
 
-#: templates/containers/live/detail.html:18
+#: templates/containers/live/detail_admin.html:18
 msgid "Administration"
 msgstr ""
 
-#: templates/containers/live/detail.html:62
+#: templates/containers/live/detail_admin.html:59
 msgid "Post"
 msgstr ""
 
-#: templates/containers/live/list.html:28
+#: templates/containers/live/list_admin.html:30
 msgid "Join"
 msgstr ""

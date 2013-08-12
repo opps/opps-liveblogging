@@ -11,7 +11,10 @@ from .conf import settings
 
 
 class Event(Container):
-    pass
+    class Meta:
+        verbose_name = _(u'Event')
+        verbose_name_plural = _(u'Events')
+        ordering = ['-date_available', 'title', 'channel_long_slug']
 
 
 class Message(Publishable):
@@ -23,3 +26,7 @@ class Message(Publishable):
         channel = Channel.objects.get(slug=settings.OPPS_LIVEBLOGGING_CHANNEL)
         self.channel = channel
         super(Message, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _(u'Message')
+        verbose_name_plural = _(u'Messages')
