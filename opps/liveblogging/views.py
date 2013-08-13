@@ -19,6 +19,18 @@ import time
 class EventDetail(DetailView):
     model = Event
 
+    def get_template_names(self):
+        templates = super(EventDetail, self).get_template_names()
+        if self.object.event_type:
+            domain_folder = self.get_template_folder()
+            templates.insert(0, '{}/{}/detail_{}.html'.format(
+                domain_folder,
+                self.long_slug,
+                self.object.event_type.template_suffix
+            ))
+        return templates
+
+
     def get_context_data(self, **kwargs):
         context = super(EventDetail, self).get_context_data(**kwargs)
         try:

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from opps.core.admin import PublishableAdmin
 
-from .models import Event, Message
+from .models import Event, Message, EventType
 
 
 class EventAdmin(PublishableAdmin):
@@ -22,7 +22,7 @@ class EventAdmin(PublishableAdmin):
             'fields': ('channel',)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
-            'fields': ('published', 'date_available',
+            'fields': ('event_type', 'published', 'date_available',
                        'show_on_root_channel',)}),
     )
 
@@ -32,5 +32,10 @@ class MessageAdmin(admin.ModelAdmin):
         return False
 
 
+class EventTypeAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ["title"], "template_suffix": ["title"]}
+
+
+admin.site.register(EventType, EventTypeAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Message, MessageAdmin)
