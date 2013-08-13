@@ -38,7 +38,8 @@ class EventType(models.Model):
 
 class Event(Container):
     event_type = models.ForeignKey('liveblogging.EventType', null=True, blank=True,
-                                   verbose_name=_("Event type"))
+                                   verbose_name=_("Event type"),
+                                   help_text=_("Leave blank to use default event template"))
     class Meta:
         verbose_name = _(u'Event')
         verbose_name_plural = _(u'Events')
