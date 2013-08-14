@@ -81,6 +81,16 @@ class EventAdminList(EventAdmin, ListView):
 
 class EventAdminDetail(EventAdmin, DetailView):
 
+    def get_template_names(self):
+        if self.object.event_type:
+            suffix = "_" + self.object.event_type.template_suffix
+        else:
+            suffix = ""
+
+        su = super(EventAdmin, self).get_template_names()
+        templates = ["{}_admin{}.html".format(name.split('.html')[0], suffix) for name in su] + su
+        return templates
+
     def get_context_data(self, **kwargs):
         context = super(EventAdminDetail, self).get_context_data(**kwargs)
         try:
