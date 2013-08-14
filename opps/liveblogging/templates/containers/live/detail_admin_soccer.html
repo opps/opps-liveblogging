@@ -1,0 +1,36 @@
+{% extends "liveblog_admin_base.html" %}
+{% load admin_list i18n %}
+{% load url from future %}
+
+{% block content %}
+<div id="content-main">
+
+  <div class="g-d-6 left">
+   <h1>Time 1</h1>
+   {{ context.transmission.event_type }}
+  </div>
+  <div class="g-d-12 center">
+
+      <form method="post">
+        {% csrf_token %}
+        <input id="id_message" name="message" class="input-block-level" type="text">
+        <a href="#" id="btnPost" class="grp-button" type="button">{% trans "send" %}</a>
+      </form>
+
+      <div  id="msgs">
+        {% for m in msg %}
+        <p>{{ m.message|safe }}</p>
+        {% endfor %}
+      </div>
+
+  </div>
+
+  <div class="g-d-6 right">
+   <h1>Time 2</h1>
+
+  </div>
+
+
+
+</div>
+{% endblock %}

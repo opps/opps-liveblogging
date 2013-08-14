@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+{% load admin_list i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Liveblogging administration" %} | {% trans 'Opps site admin' %}{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+  <li><a href="../../">{% trans "Home" %}</a> </li>
+  <li><a href="../">{% trans "Liveblogging" %}</a> </li>
+  <li><a href="./">{% trans "Menssages" %}</a> </li>
+  <li class="active">{{ context.title }}</li>
+</ul>
+{% endblock %}
+
+{% block content_title %}
+<br />
+<div class="page-header">
+  <h1>{{ context.title }} - {% trans "Administration" %}</h1>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+<style>
+#msgs {
+  height: 650px;
+  padding: 5px;
+  overflow: scroll;
+}
+#grp-content-container {
+    /*margin: auto;*/
+}
+</style>
+{{ block.super }}
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+
+function do_post(){
+    if (django.jQuery("#id_message").val() == "") {
+      return false;
+    }
+    var data = django.jQuery("form").serialize();
+    console.log(data);
+    django.jQuery.ajax({
+      type: "POST",
+      data: data,
+      success: function (e){
+        django.jQuery("#id_message").val("");
+        django.jQuery("#id_message").focus();
+        django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
+        django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
+        console.log("posted");
+      }
+    });
+}
+
+django.jQuery(document).ready(function(){
+
+    django.jQuery('#btnPost').click(function(){
+        do_post();
+    });
+
+    django.jQuery(document).on('submit', 'form', function(e) {
+        do_post();
+        e.preventDefault();
+    });
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
