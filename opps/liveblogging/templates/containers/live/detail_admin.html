@@ -45,7 +45,7 @@ function do_post(){
       success: function (e){
         django.jQuery("#id_message").val("");
         django.jQuery("#id_message").focus();
-        django.jQuery("#msgs").append("<p>"+ e +"</p>");
+        django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
         django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
         console.log("posted");
       }
