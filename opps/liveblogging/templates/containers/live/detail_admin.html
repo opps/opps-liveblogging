@@ -32,22 +32,41 @@
 
 {% block extrahead %}
 <script type="text/javascript">
-django.jQuery(document).ready(function(){
-  django.jQuery('#btnPost').click(function(){
+
+function do_post(){
     if (django.jQuery("#id_message").val() == "") {
       return false;
     }
+    var data = django.jQuery("form").serialize();
+    console.log(data);
     django.jQuery.ajax({
       type: "POST",
-      data: django.jQuery("form").serialize(),
+      data: data,
       success: function (e){
         django.jQuery("#id_message").val("");
         django.jQuery("#id_message").focus();
         django.jQuery("#msgs").append("<p>"+ e +"</p>");
         django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
+        console.log("posted");
       }
     });
+}
+
+django.jQuery(document).ready(function(){
+
+  django.jQuery('#btnPost').click(function(){
+      do_post();
   });
+
+  // django.jQuery('#form').onsubmit(function(){
+  //   return false;
+  // })
+
+    django.jQuery(document).on('submit', 'form', function(e) {
+        do_post();
+        e.preventDefault();
+    });
+
 });
 </script>
 {% endblock %}
