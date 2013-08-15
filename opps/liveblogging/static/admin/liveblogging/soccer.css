@@ -14,6 +14,7 @@ a.goal {
 #preview-box {
     margin-bottom: 10px;
     /*border:1px solid black;*/
+    padding: 10px; outline: 1px dashed #CCC;
 }
 
 #preview-box .preview-item {
@@ -52,5 +53,10 @@ a.goal {
     clear: both;
 }
 
- [contenteditable="true"] { padding: 10px; outline: 1px dashed #CCC; }
- [contenteditable="true"]:hover { padding: 10px; outline: 2px dashed #CCC; }
+em{font-style:italic;color:#888}
+
+.event-title{
+    font-weight: bold;
+}
+ /*[contenteditable="true"] { padding: 10px; outline: 1px dashed #CCC; }*/
+ /*[contenteditable="true"]:hover { padding: 10px; outline: 2px dashed #CCC; }*/
