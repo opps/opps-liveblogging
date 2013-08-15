@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 12:06-0300\n"
+"POT-Creation-Date: 2013-08-15 20:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,54 +33,89 @@ msgstr ""
 msgid "Publication"
 msgstr ""
 
-#: models.py:15 models.py:22
-msgid "Event"
+#: models.py:15
+msgid "Name"
 msgstr ""
 
 #: models.py:16
+msgid "Identifier"
+msgstr ""
+
+#: models.py:18
+msgid "Template suffix"
+msgstr ""
+
+#: models.py:22
+msgid ""
+"Ex: '<strong>soccer</strong>' so the template will be containers/{}/"
+"detail_<strong>soccer</strong>.html"
+msgstr ""
+
+#: models.py:38
+msgid "Event Type"
+msgstr ""
+
+#: models.py:39
+msgid "Event Types"
+msgstr ""
+
+#: models.py:44
+msgid "Event type"
+msgstr ""
+
+#: models.py:45
+msgid "Leave blank to use default event template"
+msgstr ""
+
+#: models.py:47 models.py:54
+msgid "Event"
+msgstr ""
+
+#: models.py:48
 msgid "Events"
 msgstr ""
 
-#: models.py:23 models.py:31
+#: models.py:55 models.py:63
 msgid "Message"
 msgstr ""
 
-#: models.py:32
+#: models.py:64
 msgid "Messages"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:5
+#: templates/liveblog_admin_base.html:5
 #: templates/containers/live/list_admin.html:5
 #: templates/containers/live/list_admin.html:17
 msgid "Liveblogging administration"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:5
+#: templates/liveblog_admin_base.html:5
 #: templates/containers/live/list_admin.html:5
 msgid "Opps site admin"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:9
+#: templates/liveblog_admin_base.html:9
 #: templates/containers/live/list_admin.html:9
 msgid "Home"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:10
+#: templates/liveblog_admin_base.html:10
 #: templates/containers/live/list_admin.html:10
 msgid "Liveblogging"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:11
+#: templates/liveblog_admin_base.html:11
 #: templates/containers/live/list_admin.html:11
 msgid "Menssages"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:18
+#: templates/liveblog_admin_base.html:19
 msgid "Administration"
 msgstr ""
 
-#: templates/containers/live/detail_admin.html:59
-msgid "Post"
+#: templates/containers/live/detail_admin.html:12
+#: templates/containers/live/detail_admin_soccer.html:77
+msgid "send"
 msgstr ""
 
 #: templates/containers/live/list_admin.html:30

@@ -34,6 +34,9 @@ class EventType(models.Model):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        verbose_name = _(u'Event Type')
+        verbose_name_plural = _(u'Event Types')
 
 
 class Event(Container):
