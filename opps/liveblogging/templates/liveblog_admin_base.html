@@ -30,6 +30,10 @@
 #grp-content-container {
     /*margin: auto;*/
 }
+
+#id_message{
+    width: 80%;
+}
 </style>
 {{ block.super }}
 {% endblock %}
@@ -38,6 +42,8 @@
 <script type="text/javascript">
 
 function do_post(){
+    django.jQuery("#id_message").val(django.jQuery('#preview-box').html());
+
     if (django.jQuery("#id_message").val() == "") {
       return false;
     }
@@ -47,10 +53,9 @@ function do_post(){
       type: "POST",
       data: data,
       success: function (e){
-        django.jQuery("#id_message").val("");
-        django.jQuery("#id_message").focus();
-        django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
-        django.jQuery("#msgs").scrollTop(django.jQuery("#msgs")[0].scrollHeight);
+        // django.jQuery("#id_message").val("");
+        // django.jQuery("#id_message").focus();
+        django.jQuery("#msgs").prepend("<p>"+ e +"</p><hr />");
         console.log("posted");
       }
     });

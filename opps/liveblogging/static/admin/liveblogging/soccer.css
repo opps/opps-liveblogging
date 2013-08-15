@@ -1,0 +1,56 @@
+a.redcard {
+    background: red !important;
+}
+
+a.yellowcard {
+    background: yellow !important;
+    color:#000 !important;
+}
+
+a.goal {
+    background: green !important;
+}
+
+#preview-box {
+    margin-bottom: 10px;
+    /*border:1px solid black;*/
+}
+
+#preview-box .preview-item {
+    text-align: left;
+}
+
+#preview-box .preview-item .description {
+    background-color: #fff;
+}
+
+#id_message {
+    margin-bottom: 10px;
+}
+
+.half {
+    width: 50%;
+}
+
+.w-30 {
+    width: 30%;
+}
+
+.w-70 {
+    width: 70%;
+}
+
+.pull-left {
+      float:left;
+}
+
+.pull-right {
+      float:right;
+}
+
+.clear {
+    clear: both;
+}
+
+ [contenteditable="true"] { padding: 10px; outline: 1px dashed #CCC; }
+ [contenteditable="true"]:hover { padding: 10px; outline: 2px dashed #CCC; }

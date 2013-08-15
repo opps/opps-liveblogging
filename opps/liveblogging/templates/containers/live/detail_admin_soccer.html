@@ -2,35 +2,118 @@
 {% load admin_list i18n %}
 {% load url from future %}
 
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="/static/admin/liveblogging/soccer.css">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="/static/admin/liveblogging/soccer.js"></script>
+{% endblock %}
+
 {% block content %}
 <div id="content-main">
+{% with match=context.transmission.match %}
 
   <div class="g-d-6 left">
-   <h1>Time 1</h1>
-   {{ context.transmission.event_type }}
+
+    <div class="w-30 pull-left">
+        <img src="{{match.localteam.image_url}}" title="{{ match.localteam.g_id }}"/>
+    </div>
+    <div class="w-70 pull-right">
+        <h1>{{match.localteam.name}}</h1>
+    </div>
+    <hr />
+
+    {% for lineup in match.local_lineup %}
+
+    <div class="w-30 pull-left">
+        <img src="{{lineup.player.image_url}}" />
+    </div>
+    <div class="w-70 pull-right">
+        <h5>{{lineup.player.name}} ({{lineup.player.number}})</h5>
+        {{lineup.player.position}}
+        Age:{{lineup.player.age}}
+
+    </div>
+    <div class="clearfix clear"></div>
+
+    {% endfor %}
+
+
   </div>
   <div class="g-d-12 center">
 
+        <div id="buttons">
+            <a href="#" class="event-button grp-button">Text</a>
+            <a href="#" class="event-button goal grp-button">Goal</a>
+            <a href="#" class="event-button redcard grp-button">Redcard</a>
+            <a href="#" class="event-button yellowcard grp-button">Yellowcard</a>
+            <a href="#" class="event-button substitution grp-button">Substitution</a>
+        </div>
+
+        <small>Preview</small>
+        <div id="preview-box" contenteditable="true">
+         <div class="preview-item row item redcard">
+            <div class="small-2 columns time">
+                <p>2º tempo</p>
+                <h1>45'</h1>
+            </div>
+            <div class="small-10 columns description" >
+                <h5><strong>**title**</strong></h5>
+                <p>
+                    <span class="icon"></span>
+                    **text**
+                </p>
+            </div>
+        </div>
+        </div>
+
       <form method="post">
+
         {% csrf_token %}
-        <input id="id_message" name="message" class="input-block-level" type="text">
+        <input id="id_message" name="message" class="input-block-level" type="hidden">
         <a href="#" id="btnPost" class="grp-button" type="button">{% trans "send" %}</a>
       </form>
 
       <div  id="msgs">
         {% for m in msg %}
         <p>{{ m.message|safe }}</p>
+        <hr />
         {% endfor %}
       </div>
 
+<small>{{ match.id }} / {{ match.g_static_id }}</small>
   </div>
 
   <div class="g-d-6 right">
-   <h1>Time 2</h1>
+
+    <div class="w-30 pull-left">
+        <img src="{{match.visitorteam.image_url}}" title="{{ match.visitorteam.g_id }}"/>
+    </div>
+    <div class="w-70 pull-right">
+        <h1>{{match.visitorteam.name}}</h1>
+    </div>
+    <hr />
+
+    {% for lineup in match.visitor_lineup %}
+
+    <div class="w-30 pull-left">
+        <img src="{{lineup.player.image_url}}" />
+    </div>
+    <div class="w-70 pull-right">
+        <h5>{{lineup.player.name}} ({{lineup.player.number}})</h5>
+        {{lineup.player.position}}
+        Age:{{lineup.player.age}}
+
+    </div>
+    <div class="clearfix clear"></div>
+
+    {% endfor %}
 
   </div>
 
-
-
+{% endwith %}
 </div>
 {% endblock %}
