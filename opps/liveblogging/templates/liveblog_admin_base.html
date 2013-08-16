@@ -55,7 +55,7 @@ function do_post(){
       success: function (e){
         // django.jQuery("#id_message").val("");
         // django.jQuery("#id_message").focus();
-        django.jQuery("#msgs").prepend("<p>"+ e +"</p><hr />");
+        django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
         console.log("posted");
       }
     });

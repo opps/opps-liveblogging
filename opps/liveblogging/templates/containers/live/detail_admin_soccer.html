@@ -4,6 +4,7 @@
 
 {% block extrastyle %}
 {{ block.super }}
+<!-- <link rel="stylesheet" type="text/css" href="/static/admin/liveblogging/goalserve.css"> -->
 <link rel="stylesheet" type="text/css" href="/static/admin/liveblogging/soccer.css">
 {% endblock %}
 
@@ -45,42 +46,42 @@
   </div>
   <div class="g-d-12 center">
 
-        <div id="buttons">
-            <a href="#" class="event-button grp-button">Text</a>
-            <a href="#" class="event-button goal grp-button">Goal</a>
-            <a href="#" class="event-button redcard grp-button">Redcard</a>
-            <a href="#" class="event-button yellowcard grp-button">Yellowcard</a>
-            <a href="#" class="event-button substitution grp-button">Substitution</a>
+        <div id="event-buttons">
+            <a href="#" class="event-button flag--text"><i class="icon"></i></a>
+            <a href="#" class="event-button flag--score"><i class="icon"></i></a>
+            <a href="#" class="event-button flag--rcard"><i class="icon"></i></a>
+            <a href="#" class="event-button flag--ycard"><i class="icon"></i></a>
+            <a href="#" class="event-button flag--replace"><i class="icon"></i></a>
         </div>
 
         <small>Preview</small>
-        <div id="preview-box">
-         <div class="preview-item row item redcard">
-            <div class="small-2 columns time">
-                <p contenteditable="true" data-placeholder="">2º tempo</p>
-                <h1><span contenteditable="true" data-placeholder="">45</span>'</h1>
+        <div id="preview-box" class="feed-list">
+         <div class="preview-item row item flag--rcard">
+            <div class="small-2 columns time w-20 pull-left">
+                <p class="event-half">1º tempo</p>
+                <h1><span class="event-minute" contenteditable="true" data-placeholder="">45</span>'</h1>
             </div>
-            <div class="small-10 columns description" >
+            <div class="small-10 columns description w-80 pull-right" >
                 <h5><div class="event-title" contenteditable="true" data-placeholder="<em>Title</em>"><em>Title</em></div></h5>
+
                 <p>
-                    <span class="icon"></span>
-                    <div contenteditable="true" data-placeholder="<em>Text</em>"><em>Text</em></div>
+                    <span class="icon event-icon"></span>
+                    <div class="event-text" contenteditable="true" data-placeholder="<em>Text</em>"><em>Text</em></div>
                 </p>
             </div>
         </div>
         </div>
 
-      <form method="post">
+      <form method="post" class="clear">
 
         {% csrf_token %}
         <input id="id_message" name="message" class="input-block-level" type="hidden">
         <a href="#" id="btnPost" class="grp-button" type="button">{% trans "send" %}</a>
       </form>
 
-      <div  id="msgs">
+      <div  id="msgs" class="feed-list">
         {% for m in msg %}
         <p>{{ m.message|safe }}</p>
-        <hr />
         {% endfor %}
       </div>
 

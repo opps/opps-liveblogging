@@ -1,4 +1,4 @@
-a.redcard {
+/*a.redcard {
     background: red !important;
 }
 
@@ -9,11 +9,12 @@ a.yellowcard {
 
 a.goal {
     background: green !important;
-}
+}*/
 
 #preview-box {
     margin-bottom: 10px;
     /*border:1px solid black;*/
+    min-height: 70px;
     padding: 10px; outline: 1px dashed #CCC;
 }
 
@@ -30,15 +31,23 @@ a.goal {
 }
 
 .half {
-    width: 50%;
+    width: 50% !important;
 }
 
 .w-30 {
-    width: 30%;
+    width: 30% !important;
 }
 
 .w-70 {
     width: 70%;
+}
+
+.w-20 {
+    width: 20% !important;
+}
+
+.w-80 {
+    width: 80%;
 }
 
 .pull-left {
@@ -60,3 +69,106 @@ em{font-style:italic;color:#888}
 }
  /*[contenteditable="true"] { padding: 10px; outline: 1px dashed #CCC; }*/
  /*[contenteditable="true"]:hover { padding: 10px; outline: 2px dashed #CCC; }*/
+
+
+.event-button {
+    float: left;
+    height: 40px;
+    margin: 5px;
+}
+
+#event-buttons {
+    margin-bottom: 0px;
+    margin-top: 10px;
+    padding: 10px;
+    height: 30px;
+    min-height: 30px;
+
+
+}
+
+.event-half {
+    margin-bottom: 5px;
+}
+ /* FEED LIST */
+
+    .feed-list{
+        margin-left: 0 !important;
+        margin-right: 0 !important;}
+    .feed-list .item-list{
+        margin-left: 0 !important;
+        margin-right: 0 !important;}
+    .feed-list .item{
+        padding-top: 10px;
+        border-bottom: 1px solid #cbcbcb;
+        min-height: 50px;}
+
+    #preview-box.feed-list .item{
+        padding-top: 10px;
+        min-height: 50px;
+        border-bottom: none;}
+
+
+
+    .feed-list .item .time{
+        color: #7e7e7e;}
+    .feed-list .item .time p{
+        margin-bottom: 5px;
+        padding-bottom: 0;
+        font-size: 9px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: inherit;}
+    .feed-list .item .time h1{
+        margin-top: -10px;
+        font-size: 25px;
+        padding-top: 0;
+        color: inherit;}
+    .feed-list .item .description{
+        color: #323232;}
+    .feed-list .item .description h5{
+        padding-top: 0;
+        margin-top: 0;
+        color: inherit;}
+    .feed-list .item .description p{
+        font-size: 14px;
+        padding-top: 0;
+        margin-top: 0;
+        color: inherit;}
+
+     .icon{
+        margin-top: -20px;
+        display: block;
+        border: none;
+        background-repeat: none;}
+
+    .feed-list .icon {
+        float: right;
+        clear: left;
+    }
+
+    .feed-list .flag--score .time h1{
+        color: #438d00;}
+    .feed-list .flag--score .description h5{
+        color: #438d00;}
+
+    .flag--score .icon{
+        height: 37px;
+        width: 37px;
+        background-image: url(/static/img/goal/icon-gol.png);}
+    .flag--replace .icon{
+        width: 23px;
+        height: 28px;
+        background-image: url(/static/img/goal/icon-transferencia.png);}
+    .flag--rcard .icon{
+        width: 24px;
+        height: 28px;
+        background-image: url(/static/img/goal/icon-card-vermelho.png);}
+    .flag--ycard .icon{
+        width: 24px;
+        height: 28px;
+        background-image: url(/static/img/goal/icon-card-amarelo.png);}
+    .flag--text .icon{
+        width: 24px;
+        height: 24px;
+        background-image: url(/static/img/goal/icon-text.png);}
