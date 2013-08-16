@@ -9,15 +9,13 @@
   <li><a href="../../">{% trans "Home" %}</a> </li>
   <li><a href="../">{% trans "Liveblogging" %}</a> </li>
   <li><a href="./">{% trans "Menssages" %}</a> </li>
-  <li class="active">{{ context.title }}</li>
+  <li class="active"><strong>{{ context.title }}</strong></li>
 </ul>
 {% endblock %}
 
 {% block content_title %}
 <br />
-<div class="page-header">
-  <h1>{{ context.title }} - {% trans "Administration" %}</h1>
-</div>
+  <hr />
 {% endblock %}
 
 {% block extrastyle %}
