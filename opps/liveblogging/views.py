@@ -35,7 +35,7 @@ class EventDetail(DetailView):
         context = super(EventDetail, self).get_context_data(**kwargs)
         try:
             msg = Message.objects.filter(event__slug=self.slug,
-                                         published=True)
+                                         published=True).order_by('-date_insert')
         except Message.DoesNotExist:
             msg = []
         context['msg'] = msg
