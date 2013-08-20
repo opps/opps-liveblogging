@@ -172,3 +172,7 @@ em{font-style:italic;color:#888}
         width: 24px;
         height: 24px;
         background-image: url(/static/img/goal/icon-text.png);}
+    .flag--game .icon{
+        width: 40px;
+        height: 37px;
+        background-image: url(/static/img/goal/icon-game.png);}

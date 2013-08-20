@@ -136,7 +136,7 @@ function _timer(callback)
     }
 
     // This methode return the status of the timer running (1) or stoped (1)
-    this.getStatus
+    this.getStatus = function()
     {
         return status;
     }
@@ -154,8 +154,11 @@ function _timer(callback)
 
         django.jQuery('div.timer span.second').html(second);
         django.jQuery('div.timer span.minute').html(minute);
-        django.jQuery('[data-minute] span').html(minute);
+        django.jQuery('[data-minute] span').html(minute + '\'');
         django.jQuery('div.timer span.hour').html(hour);
+
+        // Refresh preview object timer
+        window['goalserve.setMinute'](minute + '\'');
 
         if (supports_html5_storage()){
             localStorage.setItem('minute', minute);
