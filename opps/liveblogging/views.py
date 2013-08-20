@@ -53,7 +53,8 @@ class EventServerDetail(DetailView):
         while True:
             for m in pubsub.listen():
                 if m['type'] == 'message':
-                    yield u"data: {}\n\n".format(m['data'])
+                    data = m['data'].decode('utf-8')
+                    yield u"data: {}\n\n".format(data)
             yield
             time.sleep(0.5)
 
