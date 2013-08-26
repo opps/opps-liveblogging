@@ -43,6 +43,18 @@ class Event(Container):
     event_type = models.ForeignKey('liveblogging.EventType', null=True, blank=True,
                                    verbose_name=_("Event type"),
                                    help_text=_("Leave blank to use default event template"))
+
+    def create_event(self, POST):
+        """It assumes that there is
+        a related_name called 'transmission'
+        defined somewhere in the app,
+        it also assumes that transmission.create_event
+        will deal with passed arguments"""
+        try:
+            self.transmission.create_event(POST)
+        except NameError:
+            raise NotImplementedError("Must implements transmission related name")
+
     class Meta:
         verbose_name = _(u'Event')
         verbose_name_plural = _(u'Events')
