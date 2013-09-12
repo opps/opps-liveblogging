@@ -64,6 +64,7 @@ class EventServerDetail(DetailView):
                                          mimetype='text/event-stream')
         response['Cache-Control'] = 'no-cache'
         response['Software'] = 'opps-liveblogging'
+        response['Access-Control-Allow-Origin'] = '*'
         response.flush()
         return response
 
