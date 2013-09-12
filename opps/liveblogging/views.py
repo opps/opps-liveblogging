@@ -55,7 +55,7 @@ class EventServerDetail(DetailView):
                 if m['type'] == 'message':
                     data = m['data'].decode('utf-8')
                     yield u"data: {}\n\n".format(data)
-            yield
+            yield u""
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
