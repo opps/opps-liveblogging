@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
@@ -108,6 +109,8 @@ class EventAdminDetail(EventAdmin, DetailView):
         context['messageform'] = MessageForm
         return context
 
+    @csrf_exempt
+    @login_required(login_url='/admin/')
     def post(self, request, *args, **kwargs):
         msg = request.POST.get('message', None)
         id = request.POST.get('id_message', None)
