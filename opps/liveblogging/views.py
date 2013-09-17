@@ -110,7 +110,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         redis = Db(self.__class__.__name__, self.get_object().id)
         if not msg:
             redis.publish(json.dumps({"event": "stream"}))
-            return HttpResponse(None)
+            return HttpResponse('stream')
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
