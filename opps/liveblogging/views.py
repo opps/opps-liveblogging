@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import json, time
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
@@ -14,7 +15,6 @@ from opps.db import Db
 from .models import Event, Message
 from .forms import MessageForm
 
-import time
 
 class EventDetail(DetailView):
     model = Event
@@ -53,8 +53,12 @@ class EventServerDetail(DetailView):
         while True:
             for m in pubsub.listen():
                 if m['type'] == 'message':
-                    data = m['data'].decode('utf-8')
-                    yield u"data: {}\n\n".format(data)
+                    try:
+                        d = json.loads(m['data'])
+                        yield u"action: {}\n\n".format(d)
+                    except ValueError:
+                        data = m['data'].decode('utf-8')
+                        yield u"data: {}\n\n".format(data)
             yield u"data: \n\n"
             time.sleep(0.5)
 
@@ -105,12 +109,23 @@ class EventAdminDetail(EventAdmin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        msg = request.POST['message']
+        msg = request.POST.get('message', None)
+        id = request.POST.get('id_message', None)
         event = self.get_object()
-        obj = Message.objects.create(message=msg, user=request.user,
-                                     event=event, published=True)
-        if obj.published:
-            redis = Db(self.__class__.__name__, self.get_object().id)
+        redis = Db(self.__class__.__name__, self.get_object().id)
+        if id:
+            obj = Message.objects.get(id=id)
+            published = request.POST.get('published', True)
+            obj.published = published
+            obj.message = msg
+            obj.user = request.user
+            obj.save()
+            redis.publish(json.dumps({'action': 'update',
+                                      'id': id,
+                                      'published': published}))
+        else:
+            Message.objects.create(message=msg, user=request.user,
+                                   event=event, published=True)
             redis.publish(msg)
 
         event.create_event(request.POST)
