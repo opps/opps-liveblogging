@@ -54,12 +54,7 @@ class EventServerDetail(DetailView):
             yield u"data: {}\n\n".format(json.dumps({"event": "stream"}))
             for m in pubsub.listen():
                 if m['type'] == 'message':
-                    try:
-                        yield u"data: {}\n\n".format(m['data'])
-                    except ValueError:
-                        data = m['data'].decode('utf-8')
-                        yield u"data: {}\n\n".format(
-                            json.dumps({"event": "message", "msg": data}))
+                    yield u"data: {}\n\n".format(m['data'])
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
@@ -125,12 +120,13 @@ class EventAdminDetail(EventAdmin, DetailView):
                                       "published": published,
                                       "msg": msg}))
         else:
-            Message.objects.create(message=msg, user=request.user,
-                                   event=event, published=True)
-            redis.publish(msg)
+            obj = Message.objects.create(message=msg, user=request.user,
+                                         event=event, published=True)
+            redis.publish(json.dumps({"event": "message",
+                                      "id": obj.id,
+                                      "msg": msg}))
 
         event.create_event(request.POST)
-
         return HttpResponse(msg)
 
 
