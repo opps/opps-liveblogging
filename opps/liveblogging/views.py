@@ -55,16 +55,14 @@ class EventServerDetail(DetailView):
                 if m['type'] == 'message':
                     try:
                         d = json.loads(m['data'])
-                        msg = u"event: update\n"
-                        msg += u"data: {}\n\n".format(d)
-                        yield msg
+                        yield u"data: {}\n\n".format(
+                            {'event': 'update', 'msg': d})
                     except ValueError:
                         data = m['data'].decode('utf-8')
-                        yield u"data: {}\n\n".format(data)
+                        yield u"data: {}\n\n".format(
+                            json.dumps({'event': 'message', 'msg': data}))
             else:
-                msg = u"event: stream\n"
-                msg += u"data: live\n\n"
-                yield msg
+                yield u"data: {}\n\n".format(json.dumps({'event': 'stream'}))
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
