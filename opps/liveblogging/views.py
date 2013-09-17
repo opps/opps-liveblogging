@@ -51,16 +51,15 @@ class EventServerDetail(DetailView):
         pubsub.subscribe(redis.key)
 
         while True:
-            yield u"data: {}\n\n".format(json.dumps({'event': 'stream'}))
+            yield u"data: {}\n\n".format(json.dumps({"event": "stream"}))
             for m in pubsub.listen():
                 if m['type'] == 'message':
                     try:
-                        yield u"data: {}\n\n".format(
-                            {'event': 'update', 'msg': m['data']})
+                        yield u"data: {}\n\n".format(m['data'])
                     except ValueError:
                         data = m['data'].decode('utf-8')
                         yield u"data: {}\n\n".format(
-                            json.dumps({'event': 'message', 'msg': data}))
+                            json.dumps({"event": "message", "msg": data}))
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
@@ -121,9 +120,10 @@ class EventAdminDetail(EventAdmin, DetailView):
             obj.message = msg
             obj.user = request.user
             obj.save()
-            redis.publish(json.dumps({'action': 'update',
-                                      'id': id,
-                                      'published': published}))
+            redis.publish(json.dumps({"event": "update",
+                                      "id": id,
+                                      "published": published,
+                                      "msg": msg}))
         else:
             Message.objects.create(message=msg, user=request.user,
                                    event=event, published=True)
