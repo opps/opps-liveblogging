@@ -55,11 +55,11 @@ class EventServerDetail(DetailView):
                 if m['type'] == 'message':
                     try:
                         d = json.loads(m['data'])
-                        yield u"action: {}\n\n".format(d)
+                        yield u"event: update\ndata: {}\n\n".format(d)
                     except ValueError:
                         data = m['data'].decode('utf-8')
                         yield u"data: {}\n\n".format(data)
-            yield u"data: \n\n"
+            yield u"event: noupdate\ndata: opps-liveblogging\n\n"
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
