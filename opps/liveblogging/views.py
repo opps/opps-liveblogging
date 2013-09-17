@@ -115,7 +115,8 @@ class EventAdminDetail(EventAdmin, DetailView):
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
             obj.published = published
-            obj.message = msg
+            if msg:
+                obj.message = msg
             obj.user = request.user
             obj.save()
             redis.publish(json.dumps({"event": "update",
