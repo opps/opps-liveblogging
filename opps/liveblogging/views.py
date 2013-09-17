@@ -54,7 +54,7 @@ class EventServerDetail(DetailView):
             for m in pubsub.listen():
                 if m['type'] == 'message':
                     yield u"data: {}\n\n".format(m['data'])
-                yield u"data: {}\n\n".format(json.dumps({"event": "stream"}))
+            yield u"data: {}\n\n".format(json.dumps({"event": "stream"}))
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
@@ -108,6 +108,9 @@ class EventAdminDetail(EventAdmin, DetailView):
         id = request.POST.get('id_message', None)
         event = self.get_object()
         redis = Db(self.__class__.__name__, self.get_object().id)
+        if not msg:
+            redis.publish(json.dumps({"event": "stream"}))
+            return HttpResponse(None)
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
