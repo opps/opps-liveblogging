@@ -114,6 +114,10 @@ class EventAdminDetail(EventAdmin, DetailView):
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
+            if published == 'false':
+                published = False
+            else:
+                published = True
             obj.published = published
             if msg:
                 obj.message = msg
