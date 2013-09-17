@@ -51,18 +51,16 @@ class EventServerDetail(DetailView):
         pubsub.subscribe(redis.key)
 
         while True:
+            yield u"data: {}\n\n".format(json.dumps({'event': 'stream'}))
             for m in pubsub.listen():
                 if m['type'] == 'message':
                     try:
-                        d = json.loads(m['data'])
                         yield u"data: {}\n\n".format(
-                            {'event': 'update', 'msg': d})
+                            {'event': 'update', 'msg': m['data']})
                     except ValueError:
                         data = m['data'].decode('utf-8')
                         yield u"data: {}\n\n".format(
                             json.dumps({'event': 'message', 'msg': data}))
-            else:
-                yield u"data: {}\n\n".format(json.dumps({'event': 'stream'}))
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
