@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json, time
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 
 from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
@@ -114,7 +113,6 @@ class EventAdminDetail(EventAdmin, DetailView):
         id = request.POST.get('id_message', None)
         event = self.get_object()
         redis = Db(self.__class__.__name__, self.get_object().id)
-        import pdb; pdb.set_trace()
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
