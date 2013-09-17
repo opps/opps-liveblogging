@@ -89,10 +89,9 @@ class EventAdminList(EventAdmin, ListView):
 class EventAdminDetail(EventAdmin, DetailView):
 
     def get_template_names(self):
+        suffix = ""
         if self.object.event_type:
             suffix = "_" + self.object.event_type.template_suffix
-        else:
-            suffix = ""
 
         su = super(EventAdmin, self).get_template_names()
         templates = ["{}_admin{}.html".format(name.split('.html')[0], suffix) for name in su] + su
@@ -110,12 +109,12 @@ class EventAdminDetail(EventAdmin, DetailView):
         return context
 
     @csrf_exempt
-    @login_required(login_url='/admin/')
     def post(self, request, *args, **kwargs):
         msg = request.POST.get('message', None)
         id = request.POST.get('id_message', None)
         event = self.get_object()
         redis = Db(self.__class__.__name__, self.get_object().id)
+        import pdb; pdb.set_trace()
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
