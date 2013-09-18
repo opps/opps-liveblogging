@@ -111,6 +111,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         if request.POST.get('stream', None):
             redis.publish(json.dumps({"event": "stream"}))
             return HttpResponse('stream')
+        _list = {k: v for k,v in request.POST.iteritems()}
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
@@ -127,7 +128,6 @@ class EventAdminDetail(EventAdmin, DetailView):
                                       "id": id,
                                       "published": published,
                                       "msg": msg}))
-            _list = request.POST
         else:
             obj = Message.objects.create(message=msg, user=request.user,
                                          event=event, published=True)
@@ -135,7 +135,6 @@ class EventAdminDetail(EventAdmin, DetailView):
             redis.publish(json.dumps({"event": "message",
                                       "id": id,
                                       "msg": msg}))
-            _list = {k: v for k,v in request.POST}
             _list['id_message'] = id
 
         event.create_event(_list)
