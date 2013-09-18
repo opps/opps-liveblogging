@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
@@ -39,6 +40,8 @@ class EventDetail(DetailView):
         except Message.DoesNotExist:
             msg = []
         context['msg'] = msg
+        context['OPPS_LIVEBLOGGING_URL'] = getattr(
+            settings, 'OPPS_LIVEBLOGGING_URL')
         return context
 
 
@@ -111,6 +114,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         if request.POST.get('stream', None):
             redis.publish(json.dumps({"event": "stream"}))
             return HttpResponse('stream')
+        _list = {k: v for k,v in request.POST.iteritems()}
         if id:
             obj = Message.objects.get(id=id)
             published = request.POST.get('published', True)
@@ -130,11 +134,13 @@ class EventAdminDetail(EventAdmin, DetailView):
         else:
             obj = Message.objects.create(message=msg, user=request.user,
                                          event=event, published=True)
+            id = obj.id
             redis.publish(json.dumps({"event": "message",
-                                      "id": obj.id,
+                                      "id": id,
                                       "msg": msg}))
+            _list['id_message'] = id
 
-        event.create_event(request.POST)
+        event.create_event(_list)
         return HttpResponse(msg)
 
 
