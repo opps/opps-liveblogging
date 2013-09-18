@@ -1,6 +1,6 @@
 django.jQuery(document).ready(function(){
 
-    django.jQuery('[contenteditable="true"]').on('activate', function() {
+    django.jQuery('.preview__box').on('activate', '[contenteditable="true"]', function() {
        self = django.jQuery(this);
        if (self.html() == self.attr('data-placeholder')){
            self.empty();
@@ -14,7 +14,7 @@ django.jQuery(document).ready(function(){
     });
 
 
-    django.jQuery('[contenteditable="true"]').on('blur', function() {
+    django.jQuery('.preview__box').on('blur', '[contenteditable="true"]', function() {
         self = django.jQuery(this);
         if (self.text() == ''){
             self.html(self.attr('data-placeholder'));
@@ -23,7 +23,7 @@ django.jQuery(document).ready(function(){
 
 
 
-    django.jQuery('[contenteditable="true"]').focus(function() {
+    django.jQuery('.preview__box').on('focus', '[contenteditable="true"]', function() {
         if (this.hasChildNodes() && document.createRange && window.getSelection) {
 
            self = django.jQuery(this);
@@ -154,11 +154,7 @@ function _timer(callback)
 
         django.jQuery('div.timer span.second').html(second);
         django.jQuery('div.timer span.minute').html(minute);
-        django.jQuery('[data-minute] span').html(minute + '\'');
         django.jQuery('div.timer span.hour').html(hour);
-
-        // Refresh preview object timer
-        window['goalserve.setMinute'](minute + '\'');
 
         if (supports_html5_storage()){
             localStorage.setItem('minute', minute);
