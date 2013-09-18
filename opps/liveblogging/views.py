@@ -127,14 +127,18 @@ class EventAdminDetail(EventAdmin, DetailView):
                                       "id": id,
                                       "published": published,
                                       "msg": msg}))
+            _list = request.POST
         else:
             obj = Message.objects.create(message=msg, user=request.user,
                                          event=event, published=True)
+            id = obj.id
             redis.publish(json.dumps({"event": "message",
-                                      "id": obj.id,
+                                      "id": id,
                                       "msg": msg}))
+            _list = {k: v for k,v in request.POST}
+            _list['id_message'] = id
 
-        event.create_event(request.POST)
+        event.create_event(_list)
         return HttpResponse(msg)
 
 
