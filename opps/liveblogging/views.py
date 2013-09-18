@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 from opps.api.views.generic.list import ListView as ListAPIView
 from opps.api.views.generic.list import ListCreateView
@@ -39,6 +40,8 @@ class EventDetail(DetailView):
         except Message.DoesNotExist:
             msg = []
         context['msg'] = msg
+        context['OPPS_LIVEBLOGGING_URL'] = getattr(
+            settings, 'OPPS_LIVEBLOGGING_URL')
         return context
 
 
