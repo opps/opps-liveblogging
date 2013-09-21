@@ -21,7 +21,7 @@ urlpatterns = patterns(
 
 urlpatterns += patterns(
     '',
-    url(r'^{}/(?P<slug>[\w-]+)$'.format(
+    url(r'^{}/(?P<slug>[\w-]+)\.html$'.format(
         settings.OPPS_LIVEBLOGGING_CHANNEL),
         EventDetail.as_view(), name='event',
         kwargs={'channel__long_slug': settings.OPPS_LIVEBLOGGING_CHANNEL}),
