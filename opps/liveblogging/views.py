@@ -103,6 +103,8 @@ class EventAdminDetail(EventAdmin, DetailView):
             msg = []
         context['msg'] = msg
         context['messageform'] = MessageForm
+        context['OPPS_LIVEBLOGGING_URL'] = getattr(
+            settings, 'OPPS_LIVEBLOGGING_URL')
         return context
 
     @csrf_exempt
