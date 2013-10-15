@@ -53,8 +53,9 @@ class EventServerDetail(DetailView):
         while True:
             for m in pubsub.listen():
                 if m['type'] == 'message':
-                    yield u"data: {}\n\n".format(m['data'])
-            yield u"data: {}\n\n".format(json.dumps({"event": "stream"}))
+                    yield u"retry: 1000\n data: {}\n\n".format(m['data'])
+                yield u"retry: 1000\n data: {}\n\n".format(
+                    json.dumps({"event": "stream"}))
             time.sleep(0.5)
 
     @method_decorator(csrf_exempt)
