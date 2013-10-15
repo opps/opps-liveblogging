@@ -57,12 +57,12 @@ class EventServerDetail(DetailView):
             for m in pubsub.listen():
                 if m['type'] == 'message':
                     msg = u"compatibility: true\n"
-                    msg += u"retry: 1000\n"
+                    msg += u"retry: 10000\n"
                     msg += u"data: {}\n\n".format(m['data'])
                     yield msg
 
                 stream = u"compatibility: true\n"
-                stream += u"retry: 1000\n"
+                stream += u"retry: 10000\n"
                 stream += u"data: {}\n\n".format(json.dumps({"event": "stream"}))
                 yield stream
             time.sleep(0.5)
