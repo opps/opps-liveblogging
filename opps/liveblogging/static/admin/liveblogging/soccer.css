@@ -168,7 +168,7 @@ em{font-style:italic;color:#888}
         width: 24px;
         height: 28px;
         background-image: url(/static/img/goal/icon-card-amarelo.png);}
-    .flag--text .icon{
+    .flag.flag--text .icon{
         width: 24px;
         height: 24px;
         background-image: url(/static/img/goal/icon-text.png);}
