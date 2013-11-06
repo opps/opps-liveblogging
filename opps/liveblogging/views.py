@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json, time
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from opps.api.views.generic.list import ListView as ListAPIView
-from opps.api.views.generic.list import ListCreateView
 from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
 from opps.db import Db
@@ -151,11 +149,3 @@ class EventAdminDetail(EventAdmin, DetailView):
 
         event.create_event(_list)
         return HttpResponse(msg)
-
-
-class EventAPIList(ListAPIView):
-    model = Event
-
-
-class MessageAPIList(ListCreateView):
-    model = Message
