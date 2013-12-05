@@ -2,34 +2,30 @@
 # -*- coding: utf-8 -*-
 from django.utils import timezone
 
-from tastypie.resources import ModelResource
-from tastypie.authorization import DjangoAuthorization
-from tastypie.constants import ALL
+from opps.api import BaseHandler
 
-from opps.api import MetaBase
-
-from .models import Event as EventModel
-from .models import Message as MessageModel
+from .models import Event, Message
 
 
-class Event(ModelResource):
-    class Meta(MetaBase):
-        queryset = EventModel.objects.filter(
-            published=True,
-            date_available__lte=timezone.now()
-        )
+class Handler(BaseHandler):
+
+    def read(self, request):
+        filters = {}
+        filters['date_available__lte'] = timezone.now()
+        filters['published'] = True
+        return self.model.objects.filter(**filters)
 
 
-class Message(ModelResource):
-    class Meta:
-        queryset = MessageModel.objects.filter(
-            published=True,
-            date_available__lte=timezone.now()
-        )
-        allowed_methods = ['get', 'post']
-        filtering = {
-            'site_domain': ALL,
-            'channel_long_slug': ALL,
-            'event': ALL,
-        }
-        authorization = DjangoAuthorization()
+class EventHandler(Handler):
+    model = Event
+
+    def read(self, request):
+        filters = {}
+        filters['date_available__lte'] = timezone.now()
+        filters['published'] = True
+        return self.model.objects.filter(**filters)
+
+
+class MessageHandler(Handler):
+    allowed_methods = ['GET', 'POST']
+    model = Message

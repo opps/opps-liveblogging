@@ -1,21 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
 
-from tastypie.api import Api
+from piston.resource import Resource
 
-from .conf import settings
-from opps.api.conf import settings as apiset
-from .api import Event, Message
+from .api import EventHandler, MessageHandler
 
 
-_api = Api(api_name=u"{}/{}".format(
-    apiset.OPPS_API_NAME,
-    settings.OPPS_LIVEBLOGGING_CHANNEL))
-_api.register(Event())
-_api.register(Message())
+event = Resource(handler=EventHandler)
+message = Resource(handler=MessageHandler)
 
 urlpatterns = patterns(
     '',
-    url(r'^api/', include(_api.urls)),
+    url(r'^api/event/$', event),
+    url(r'^api/message/$', message),
 )
