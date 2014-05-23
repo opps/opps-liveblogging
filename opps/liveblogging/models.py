@@ -52,8 +52,9 @@ class Event(Container):
         will deal with passed arguments"""
         try:
             self.transmission.create_event(POST)
-        except NameError:
-            raise NotImplementedError("Must implements transmission related name")
+        except:
+            # TODO: fuck the transmission
+            pass
 
     class Meta:
         verbose_name = _(u'Event')
