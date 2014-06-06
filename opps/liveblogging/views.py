@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json, time
+import json
+import time
+from django.db import connections
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.utils.decorators import method_decorator
@@ -50,6 +52,9 @@ class EventServerDetail(DetailView):
         redis = Db('eventadmindetail', self.get_object().id)
         pubsub = redis.object().pubsub()
         pubsub.subscribe(redis.key)
+
+        for conn in connections.all():
+            conn.close()
 
         while True:
             for m in pubsub.listen():
