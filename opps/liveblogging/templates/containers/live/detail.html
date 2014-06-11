@@ -5,7 +5,7 @@
 </div>
 <script>
 if (!!window.EventSource) {
-  var source = new EventSource("/live/server/testando");
+  var source = new EventSource("{{ context.channel.get_absolute_url }}server/{{ context.slug }}");
 
   source.onopen = function () {
   }
@@ -25,8 +25,11 @@ if (!!window.EventSource) {
   }, false);
 
   source.onmessage = function(e) {
-    document.getElementById("result").innerHTML += "<p>" + e.data + "</p>";
-    document.getElementById("result").innerHTML += "<p>" + e.event + "</p>";
+    var data = JSON.parse(e.data)
+    if (data.event == 'message'){
+      var html = document.getElementById("result").innerHTML
+      document.getElementById("result").innerHTML = "<p>" + data.msg + "</p>" + html;
+    }
   };
 } else {
   // Result to xhr polling :(

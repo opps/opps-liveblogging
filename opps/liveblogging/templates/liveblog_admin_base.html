@@ -38,42 +38,35 @@
 {% endblock %}
 
 {% block extrahead %}
-<meta http-equiv="Content-Type" content="text/html;
-charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <script type="text/javascript">
 
-function do_post(){
-    django.jQuery("#id_message").val(django.jQuery('#preview-box').html());
+function send_msg(){
+  var data = django.jQuery("form").serialize();
+  console.log(data);
 
-    if (django.jQuery("#id_message").val() == "") {
-      return false;
+  django.jQuery.ajax({
+    type: "POST",
+    data: data,
+    success: function (e){
+      django.jQuery("#id_message").val("");
+      django.jQuery("#id_message").focus();
+      django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
+      console.log("posted");
     }
-    var data = django.jQuery("form").serialize();
-    console.log(data);
-    django.jQuery.ajax({
-      type: "POST",
-      data: data,
-      success: function (e){
-        // django.jQuery("#id_message").val("");
-        // django.jQuery("#id_message").focus();
-        django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
-        console.log("posted");
-      }
-    });
-}
+  });
+};
 
 django.jQuery(document).ready(function(){
+  django.jQuery('#btnPost').click(function(){
+    send_msg();
+  });
 
-    django.jQuery('#btnPost').click(function(){
-        do_post();
-    });
-
-    django.jQuery(document).on('submit', 'form', function(e) {
-        do_post();
-        e.preventDefault();
-    });
-
+  django.jQuery(document).on('submit', 'form', function(e) {
+    send_msg();
+    e.preventDefault();
+  });
 });
 </script>
 {% endblock %}
