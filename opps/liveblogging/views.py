@@ -49,7 +49,10 @@ class EventServerDetail(DetailView):
     model = Event
 
     def _queue(self):
-        redis = Db('eventadmindetail', self.get_object().id)
+        try:
+            redis = Db('eventadmindetail', self.get_object().id)
+        except:
+            redis = Db('eventadmindetail', self.event_obj.id)
         pubsub = redis.object().pubsub()
         pubsub.subscribe(redis.key)
 
@@ -72,6 +75,10 @@ class EventServerDetail(DetailView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        self.slug = self.kwargs.get('slug')
+        self.event_obj = self.model.objects.get(
+                channel_long_slug=self.get_long_slug(), slug=self.slug)
+
         response = StreamingHttpResponse(self._queue(),
                                          mimetype='text/event-stream')
         response['Cache-Control'] = 'no-cache'
