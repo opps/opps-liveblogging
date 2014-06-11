@@ -30,3 +30,4 @@ urlpatterns += patterns(
         EventServerDetail.as_view(), name='event-server',
         kwargs={'channel__long_slug': settings.OPPS_LIVEBLOGGING_CHANNEL}),
 )
+
