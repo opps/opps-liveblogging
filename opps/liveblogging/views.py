@@ -9,6 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
+from django.core.serializers.json import DjangoJSONEncoder
+
 from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
 from opps.db import Db
@@ -149,14 +151,14 @@ class EventAdminDetail(EventAdmin, DetailView):
             redis.publish(json.dumps({"event": "update",
                                       "id": id,
                                       "published": published,
-                                      "msg": msg}))
+                                      "msg": msg, "date": obj.date_available}, cls=DjangoJSONEncoder))
         else:
             obj = Message.objects.create(message=msg, user=request.user,
                                          event=event, published=True)
             id = obj.id
             redis.publish(json.dumps({"event": "message",
                                       "id": id,
-                                      "msg": msg}))
+                                      "msg": msg, "date": obj.date_available}, cls=DjangoJSONEncoder))
             _list['id_message'] = id
 
         event.create_event(_list)
