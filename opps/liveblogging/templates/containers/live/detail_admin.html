@@ -4,20 +4,39 @@
 {% block content %}
 <div id="content-main">
 
-  <div class="g-d-24 center">
 
-      <form method="post">
-        {% csrf_token %}
-        <input id="id_message" name="message" class="input-block-level" type="text">
-        <a href="#" id="btnPost" class="grp-button" type="button">{% trans "send" %}</a>
-      </form>
+    <div class="g-d-24 center">
 
-      <div  id="msgs">
-        {% for m in msg %}
-        <p>{{ m.message|safe }}</p>
-        {% endfor %}
-      </div>
+        <div id="box-images">
+            
+        </div>
 
-  </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="wall-image">
+                <input id="link_image" name="link_image" class="input-block-level" type="hidden">
+                <div>
+                    <img id="mine-thumb" src="" />
+                </div>
+                <div>
+                    <a href="#" id="cleanImage" class="grp-button" type="button">Remover</a>
+                </div>
+                <div>
+                    <a href="#" id="btnAddImage" class="grp-button" type="button">Adicionar Image</a>
+                </div>
+            </div>
+            <div>
+                <input id="id_message" name="message" class="input-block-level" type="text">
+                <a href="#" id="btnPost" class="grp-button" type="button">{% trans "send" %}</a>
+            </div>
+        </form>
+
+        <div  id="msgs">
+            {% for m in msg %}
+                <p>{{ m.message|safe }}</p>
+            {% endfor %}
+        </div>
+
+    </div>
 </div>
 {% endblock %}

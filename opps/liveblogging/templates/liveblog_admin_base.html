@@ -20,6 +20,8 @@
 {% endblock %}
 
 {% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}admin/opps/images/css/bootstrap/css/bootstrap.min.css" media="all"/>
+
 <style>
 #msgs {
   height: 650px;
@@ -30,8 +32,50 @@
     /*margin: auto;*/
 }
 
-#id_message{
+.wall-image{
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.wall-image div,
+.wall-image{
+    float: left;
+}
+
+#id_message,
+#link_image{
     width: 80%;
+}
+#mine-thumb{
+    display: none;
+    height: 40px;
+    width: 40px;
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+#cleanImage{
+    margin: 0 20px;
+    display: none;
+    float: left;
+}
+
+#box-images{
+    margin-bottom: 20px;
+    overflow: scroll;
+    display: none;
+    height: 500px;
+    width: 100%;
+}
+
+#box-images form select{
+    padding: 0 5px;
+}
+
+#box-images form input{
+    margin-bottom: 20px;
+    height: 28px;
 }
 </style>
 {{ block.super }}
@@ -42,32 +86,109 @@
 
 <script type="text/javascript">
 
-function send_msg(){
-  var data = django.jQuery("form").serialize();
-  console.log(data);
+    function send_msg(){
+        var img = django.jQuery('#link_image');
 
-  django.jQuery.ajax({
-    type: "POST",
-    data: data,
-    success: function (e){
-      django.jQuery("#id_message").val("");
-      django.jQuery("#id_message").focus();
-      django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
-      console.log("posted");
+        if(img.val() != ''){
+            var msg = django.jQuery('#id_message');
+            django.jQuery('#id_message').val("<img src='" + img.val() + "' style='max-width: 100%;' /><br />" + msg.val());
+        }
+
+        var data = django.jQuery("form").serialize();
+
+        django.jQuery.ajax({
+            type: "POST",
+            data: data,
+            success: function (e){
+                django.jQuery("#link_image").val("");
+                django.jQuery("#id_message").val("");
+                django.jQuery("#id_message").focus();
+                django.jQuery("#msgs").prepend("<p>"+ e +"</p>");
+            }
+        });
+    };
+
+    function list_images(page, q, user, published){
+        django.jQuery.ajax({
+            url: '/admin/images/get_images/',
+            type: "GET",
+            data: {template_name: 'list_images.html', page: page, q: q, user: user, published: published},
+            success: function (e){
+                django.jQuery('#box-images').html(e);
+            }
+        });
+    };
+
+    function getURLParameter(url, name) {
+        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
     }
-  });
-};
 
-django.jQuery(document).ready(function(){
-  django.jQuery('#btnPost').click(function(){
-    send_msg();
-  });
+    django.jQuery(document).ready(function(){
+        django.jQuery('#btnPost').click(function(){
+            send_msg();
+            django.jQuery("#mine-thumb").hide();
+            django.jQuery("#cleanImage").hide();
+        });
 
-  django.jQuery(document).on('submit', 'form', function(e) {
-    send_msg();
-    e.preventDefault();
-  });
-});
+        django.jQuery("#box-images").on("click", ".btn-search", function () {
+            var user = django.jQuery('#id_user').val();
+            var published = django.jQuery('#id_published').val();
+            var q = django.jQuery('#text-search').val();
+            var page = '';
+            list_images(page, q, user, published);
+            return false;
+        });
+
+        django.jQuery(document).on('submit', 'form', function(e) {
+            send_msg();
+            e.preventDefault();
+        });
+
+        django.jQuery('#btnAddImage').click(function(){
+            list_images();
+            django.jQuery("#box-images").show();
+            return false;
+        });
+
+        django.jQuery('#cleanImage').click(function(){
+            django.jQuery("#link_image").val("");
+            django.jQuery("#mine-thumb").hide();
+            django.jQuery("#cleanImage").hide();
+            return false;
+        });
+
+        django.jQuery("#box-images").on("click", ".endless_page_link", function () {
+            var url = django.jQuery(this).attr('href');
+            var page = getURLParameter(url, 'page');
+            var user = django.jQuery('#id_user').val();
+            var published = django.jQuery('#id_published').val();
+            var q = django.jQuery('#text-search').val();
+            list_images(page, q, user, published);
+            return false;
+        });
+
+        django.jQuery("#box-images").on("click", ".add-link-image", function () {
+            var url = django.jQuery(this).attr('href');
+            django.jQuery("#link_image").val(url);
+            django.jQuery("#box-images").hide();
+            django.jQuery("#mine-thumb").attr('src', django.jQuery(this).attr('href'));
+            django.jQuery("#mine-thumb").show();
+            django.jQuery("#cleanImage").show();
+            return false;
+        });
+
+        django.jQuery("#box-images").on("click", "#addNewImage", function () {
+            django.jQuery("#box-images").hide();
+            pageAddImage = window.open (django.jQuery(this).attr('href'),
+                            "Adicionar Imagem",
+                            "location=1,status=1,scrollbars=1,"+
+                            "width=600,height=600");
+            pageAddImage.moveTo(0,0);
+            return false;
+        });
+
+    });
+
 </script>
 {% endblock %}
 
