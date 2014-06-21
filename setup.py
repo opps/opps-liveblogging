@@ -11,7 +11,7 @@ install_requires = ["opps>=0.2"]
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Developers",
                "Operating System :: OS Independent",
-               "Framework :: Django",
+               "Framework :: Opps",
                'Programming Language :: Python',
                "Programming Language :: Python :: 2.7",
                "Operating System :: OS Independent",
