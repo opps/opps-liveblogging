@@ -12,5 +12,6 @@ __description__ = u"Liveblogging app, event broadcast via text"
 
 __author__ = u"Thiago Avelino"
 __credits__ = []
+__license__ = u"MIT"
 __email__ = u"thiago@avelino.xxx"
 __copyright__ = u"Copyright 2014, Thiago Avelino"
