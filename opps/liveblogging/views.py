@@ -15,9 +15,9 @@ from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
 from opps.db import Db
 
+import signals
 from .models import Event, Message
 from .forms import MessageForm
-
 
 class EventDetail(DetailView):
     model = Event
@@ -37,8 +37,8 @@ class EventDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventDetail, self).get_context_data(**kwargs)
         try:
-            msg = Message.objects.filter(event__slug=self.slug,
-                                         published=True).order_by('-date_insert')
+            msg = Message.objects.filter(
+                event__slug=self.slug, published=True).order_by('-date_insert')
         except Message.DoesNotExist:
             msg = []
         context['msg'] = msg
@@ -64,14 +64,15 @@ class EventServerDetail(DetailView):
         while True:
             for m in pubsub.listen():
                 if m['type'] == 'message':
-                    msg = u"compatibility: true\n"
+                    msg  = u"compatibility: true\n"
                     msg += u"retry: 10000\n"
                     msg += u"data: {}\n\n".format(m['data'])
                     yield msg
 
-                stream = u"compatibility: true\n"
+                stream  = u"compatibility: true\n"
                 stream += u"retry: 10000\n"
-                stream += u"data: {}\n\n".format(json.dumps({"event": "stream"}))
+                stream += u"data: {}\n\n".format(
+                    json.dumps({"event": "stream"}))
                 yield stream
             time.sleep(0.5)
 
@@ -110,14 +111,15 @@ class EventAdminDetail(EventAdmin, DetailView):
             suffix = "_" + self.object.event_type.template_suffix
 
         su = super(EventAdmin, self).get_template_names()
-        templates = ["{}_admin{}.html".format(name.split('.html')[0], suffix) for name in su] + su
-        return templates
+        t = "{}_admin{}.html"
+        templates = [t.format(name.split('.html')[0], suffix) for name in su]
+        return templates + su
 
     def get_context_data(self, **kwargs):
         context = super(EventAdminDetail, self).get_context_data(**kwargs)
         try:
-            msg = Message.objects.filter(event__slug=self.slug,
-                                         published=True).order_by('-date_insert')
+            msg = Message.objects.filter(
+                event__slug=self.slug, published=True).order_by('-date_insert')
         except Message.DoesNotExist:
             msg = []
         context['msg'] = msg
@@ -132,12 +134,18 @@ class EventAdminDetail(EventAdmin, DetailView):
         id = request.POST.get('id_message', None)
         event = self.get_object()
         redis = Db(self.__class__.__name__, self.get_object().id)
+
         if request.POST.get('stream', None):
             redis.publish(json.dumps({"event": "stream"}))
             return HttpResponse('stream')
-        _list = {k: v for k,v in request.POST.iteritems()}
+
+        _list = {}
+        for k, v in request.POST.iteritems():
+            _list[k] = v
+
         if id:
             obj = Message.objects.get(id=id)
+
             published = request.POST.get('published', True)
             if published == 'false':
                 published = False
@@ -147,19 +155,56 @@ class EventAdminDetail(EventAdmin, DetailView):
             if msg:
                 obj.message = msg
             obj.user = request.user
+
+            if published:
+                signals.message_pre_save.send(
+                    sender=self.__class__, instance=obj, extra_data=_list)
+            else:
+                signals.message_pre_delete.send(
+                    sender=self.__class__, instance=obj, extra_data=_list)
+
             obj.save()
-            redis.publish(json.dumps({"event": "update",
-                                      "id": id,
-                                      "published": published,
-                                      "msg": msg, "date": obj.date_available}, cls=DjangoJSONEncoder))
+            redis.publish(json.dumps({
+                    "event": "update",
+                    "id": id,
+                    "published": published,
+                    "msg": msg,
+                    "date": obj.date_available
+                },
+                cls=DjangoJSONEncoder)
+            )
+
+            if published:
+                signals.message_post_save.send(
+                    sender=self.__class__, instance=obj, created=False,
+                    extra_data=_list)
+            else:
+                signals.message_post_delete.send(
+                    sender=self.__class__, instance=obj, extra_data=_list)
         else:
-            obj = Message.objects.create(message=msg, user=request.user,
-                                         event=event, published=True)
+            obj = Message(
+                message=msg, user=request.user, event=event, published=True)
+
+
+            signals.message_pre_save.send(
+                sender=self.__class__, instance=obj, extra_data=_list)
+
+            obj.save(force_insert=True)
+
+            signals.message_pre_save
             id = obj.id
-            redis.publish(json.dumps({"event": "message",
-                                      "id": id,
-                                      "msg": msg, "date": obj.date_available}, cls=DjangoJSONEncoder))
+            redis.publish(json.dumps({
+                    "event": "message",
+                    "id": id,
+                    "msg": msg,
+                    "date": obj.date_available
+                },
+                cls=DjangoJSONEncoder)
+            )
             _list['id_message'] = id
 
-        event.create_event(_list)
+            signals.message_post_save.send(
+                sender=self.__class__, instance=obj, created=True,
+                extra_data=_list)
+
         return HttpResponse(msg)
