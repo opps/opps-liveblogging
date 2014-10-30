@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
@@ -13,7 +15,7 @@ from .conf import settings
 
 class EventType(models.Model):
     title = models.CharField(_("Name"), max_length=30, unique=True)
-    slug = models.SlugField(_(u"Identifier"), db_index=True, max_length=35)
+    slug = models.SlugField(_("Identifier"), db_index=True, max_length=35)
     template_suffix = models.SlugField(
         _("Template suffix"),
         max_length=35,
@@ -35,8 +37,8 @@ class EventType(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = _(u'Event Type')
-        verbose_name_plural = _(u'Event Types')
+        verbose_name = _('Event Type')
+        verbose_name_plural = _('Event Types')
 
 
 class Event(Container):
@@ -45,15 +47,15 @@ class Event(Container):
                                    help_text=_("Leave blank to use default event template"))
 
     class Meta:
-        verbose_name = _(u'Event')
-        verbose_name_plural = _(u'Events')
+        verbose_name = _('Event')
+        verbose_name_plural = _('Events')
         ordering = ['-date_available', 'title', 'channel_long_slug']
 
 
 class Message(Publishable):
     event = models.ForeignKey('liveblogging.Event',
-                              verbose_name=_(u'Event'))
-    message = models.TextField(_(u'Message'))
+                              verbose_name=_('Event'))
+    message = models.TextField(_('Message'))
 
     def save(self, *args, **kwargs):
         channel = Channel.objects.get(slug=settings.OPPS_LIVEBLOGGING_CHANNEL)
@@ -61,5 +63,5 @@ class Message(Publishable):
         super(Message, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = _(u'Message')
-        verbose_name_plural = _(u'Messages')
+        verbose_name = _('Message')
+        verbose_name_plural = _('Messages')
