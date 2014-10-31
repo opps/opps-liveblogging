@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import time
+import logging
 from django.db import connections
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
@@ -14,10 +15,26 @@ from django.core.serializers.json import DjangoJSONEncoder
 from opps.views.generic.list import ListView
 from opps.views.generic.detail import DetailView
 from opps.db import Db
+from redis.exceptions import RedisError
 
 import signals
 from .models import Event, Message
 from .forms import MessageForm
+
+
+logger = logging.getLogger(__name__)
+
+
+def redis_wrapper(instance, method, *args, **kwargs):
+    try:
+        return getattr(instance, method)(*args, **kwargs)
+    except RedisError as e:
+        logger.error(
+            'Redis error: {}'.format(e), exc_info=True, extra={
+                'exception': e,
+            }
+        )
+
 
 class EventDetail(DetailView):
     model = Event
@@ -136,7 +153,7 @@ class EventAdminDetail(EventAdmin, DetailView):
         redis = Db(self.__class__.__name__, self.get_object().id)
 
         if request.POST.get('stream', None):
-            redis.publish(json.dumps({"event": "stream"}))
+            redis_wrapper(redis, 'publish', json.dumps({"event": "stream"}))
             return HttpResponse('stream')
 
         _list = {}
@@ -146,15 +163,17 @@ class EventAdminDetail(EventAdmin, DetailView):
         if id:
             obj = Message.objects.get(id=id)
 
-            published = request.POST.get('published', True)
-            if published == 'false':
+            published = True
+
+            if request.POST.get('published') == 'false':
                 published = False
-            else:
-                published = True
+
             obj.published = published
+
             if msg:
                 obj.message = msg
             obj.user = request.user
+            obj.extra = _list
 
             if published:
                 signals.message_pre_save.send(
@@ -164,15 +183,15 @@ class EventAdminDetail(EventAdmin, DetailView):
                     sender=self.__class__, instance=obj, extra_data=_list)
 
             obj.save()
-            redis.publish(json.dumps({
+
+            redis_wrapper(redis, 'publish', json.dumps({
                     "event": "update",
                     "id": id,
                     "published": published,
                     "msg": msg,
                     "date": obj.date_available
                 },
-                cls=DjangoJSONEncoder)
-            )
+                cls=DjangoJSONEncoder))
 
             if published:
                 signals.message_post_save.send(
@@ -183,7 +202,8 @@ class EventAdminDetail(EventAdmin, DetailView):
                     sender=self.__class__, instance=obj, extra_data=_list)
         else:
             obj = Message(
-                message=msg, user=request.user, event=event, published=True)
+                message=msg, user=request.user, event=event, published=True,
+                extra=_list)
 
 
             signals.message_pre_save.send(
@@ -193,14 +213,15 @@ class EventAdminDetail(EventAdmin, DetailView):
 
             signals.message_pre_save
             id = obj.id
-            redis.publish(json.dumps({
+
+            redis_wrapper(redis, 'publish', json.dumps({
                     "event": "message",
                     "id": id,
                     "msg": msg,
                     "date": obj.date_available
                 },
-                cls=DjangoJSONEncoder)
-            )
+                cls=DjangoJSONEncoder))
+
             _list['id_message'] = id
 
             signals.message_post_save.send(
