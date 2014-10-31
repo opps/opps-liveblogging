@@ -172,8 +172,8 @@ class EventAdminDetail(EventAdmin, DetailView):
 
             if msg:
                 obj.message = msg
+
             obj.user = request.user
-            obj.extra = _list
 
             if published:
                 signals.message_pre_save.send(
@@ -202,8 +202,7 @@ class EventAdminDetail(EventAdmin, DetailView):
                     sender=self.__class__, instance=obj, extra_data=_list)
         else:
             obj = Message(
-                message=msg, user=request.user, event=event, published=True,
-                extra=_list)
+                message=msg, user=request.user, event=event, published=True)
 
 
             signals.message_pre_save.send(
